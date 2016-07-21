@@ -1,17 +1,18 @@
 require 'scraperwiki'
 require 'mechanize'
 
-def get_planning_links(page)
-  list_of_applications = page.search("div.col_4")
-  links_of_applications = list_of_applications.search('a')
+def get_page_elements(page)
+  elements_in_div = page.search("div.col_4")
+  links_in_div = list_of_applications.search('a')
 
-  return links_of_applications
+  return links_in_div
 end
 
 def return_only_application_links(links_on_main_div)
   links_to_planning_applications =[]
 
   links_on_main_div.each_with_index do |link, index|
+    #The first two are links to documents, we don't need those
     if index > 1
       links_to_planning_applications.push(link)
     end
@@ -21,15 +22,15 @@ def return_only_application_links(links_on_main_div)
 end
 
 def save_one_application(planning_application_page, url)
-  whole_page = planning_application_page.search("div.col_4").children
-  #On Wednesday July 20, each page was a single element broken up with <br> tags, which is really annoying. For that reason, I've accessed the children elements directly.
+  elements_from_page = planning_application_page.search("div.col_4").children
+  #On Wednesday July 20, each application was on a page in a single element broken up with <br> tags. For that reason, I've accessed the child elements directly.
 
   record = {
     "info_url" => url,
-    "council_reference" => whole_page[4].inner_text.strip,
-    "address" => whole_page[2].inner_text.strip,
-    "on_notice_to" => whole_page[14].inner_text.strip,
-    "description" => whole_page[9].inner_text.strip,
+    "council_reference" => elements_from_page[4].inner_text.strip,
+    "address" => elements_from_page[2].inner_text.strip,
+    "on_notice_to" => elements_from_page[14].inner_text.strip,
+    "description" => elements_from_page[9].inner_text.strip,
     "date_scraped" => Date.today.to_s
   }
 
@@ -46,7 +47,7 @@ url = "http://www.brimbank.vic.gov.au/DEVELOPMENT/Planning/Current_Advertised_Ap
 agent = Mechanize.new
 first_page = agent.get(url)
 
-#This site has links to each planning application in one giant div. 
+#This site has links to each planning application in one giant div. Each application is on a separate page
 links_on_main_div = get_planning_links(first_page)
 links_to_planning_applications = return_only_application_links(links_on_main_div)
 
