@@ -40,9 +40,9 @@ def save_one_application(planning_application_page, url)
 
   if (ScraperWiki.select("* from data where `council_reference`='#{record['council_reference']}'").empty? rescue true)
     ScraperWiki.save_sqlite(['council_reference'], record)
-    puts record
+    #puts record
   else
-    puts "Skipping already saved record " + record['council_reference']
+    #puts "Skipping already saved record " + record['council_reference']
   end
 
 end
