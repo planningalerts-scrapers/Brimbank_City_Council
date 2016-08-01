@@ -57,7 +57,7 @@ links_on_main_div = get_page_elements(first_page)
 links_to_planning_applications = return_only_application_links(links_on_main_div)
 
 links_to_planning_applications.each do |link|
-  application_url = link.attributes['href']
+  application_url = link.attributes['href'].to_s
   planning_application_page = agent.get(application_url)
-  save_one_application(planning_application_page, url)
+  save_one_application(planning_application_page, application_url)
 end
