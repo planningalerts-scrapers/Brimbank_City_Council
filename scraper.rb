@@ -31,9 +31,9 @@ def save_one_application(planning_application_page, url)
 
   record = {
     "info_url" => url,
-    "comment_url" => 'mailto:#{link_to_decision}',
+    "comment_url" => "mailto: #{url}",
     "council_reference" => elements_from_page[4].inner_text.strip,
-    "address" => elements_from_page[2].inner_text.strip,
+    "address" => "#{elements_from_page[2].inner_text.strip}, Vic",
     "on_notice_to" => on_notice_to_formatted,
     "description" => elements_from_page[9].inner_text.strip,
     "date_scraped" => Date.today.to_s
