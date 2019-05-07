@@ -16,14 +16,9 @@ page.search("div.item-list a").each do |a|
       "date_scraped" => Date.today.to_s
     }
 
-    if (ScraperWiki.select("* from data where `council_reference`='#{record['council_reference']}'").empty? rescue true)
-      puts "Saving record " + record['council_reference'] + " - " + record['address']
+    puts "Saving record " + record['council_reference'] + " - " + record['address']
 #      puts record
-      ScraperWiki.save_sqlite(['council_reference'], record)
-    else
-      puts "Skipping already saved record " + record['council_reference']
-    end
+    ScraperWiki.save_sqlite(['council_reference'], record)
   end
   page = agent.get(url + a.attributes['href'].to_s)
 end
-
